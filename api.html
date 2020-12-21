@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>api usage</title>
+    <style>
+        .route {
+            display: inline-block;
+            width: 100px;
+            margin-left: 1.5rem;
+            color: blue;
+        }
+
+        .endpoint {
+            display: inline-block;
+            font-size: 20px;
+            margin-bottom: 0.5rem;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <h1>Endpoints:</h1>
+        <ul>
+            <li><span class="endpoint">/data</span></li>
+            <ul>
+                <li>GET <span class="route">/data</span> => get current data (clients and networks)</li>
+                <li>GET <span class="route">/data/all</span> => get current data (clients and networks)</li>
+                <li>GET <span class="route">/data/clients</span> => get only clients</li>
+                <li>GET <span class="route">/data/networks</span> => get only networks</li>
+                <br>
+                <li>POST <span class="route">/data</span> => upload csv file with data</li>
+            </ul>
+        </ul>
+    </div>
+</body>
+
+</html>

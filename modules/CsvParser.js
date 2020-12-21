@@ -1,7 +1,9 @@
+"use strict";
+
 const fs = require("fs");
 const { EOL } = require("os");
-const ClientRecord = require("./records/client.record");
-const NetworkRecord = require("./records/network.record");
+const ClientRecord = require("../records/client.record");
+const NetworkRecord = require("../records/network.record");
 
 class CsvParser {
 	constructor(path, delimiter = ",") {
