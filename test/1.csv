@@ -5,3 +5,6 @@
  
  Station MAC, First time seen, Last time seen, Power, # packets, BSSID, Probed ESSIDs
  00:1B:77:7F:67:94, 2007-10-07 12:49:43, 2007-10-07 12:49:43, 178,        3, (not associated) ,
+ 34:2E:B6:1C:D2:8D, 2020-12-19 10:59:16, 2020-12-19 11:14:50, -66,       49, 90:FD:73:AC:B9:9F,
+ F2:7B:2E:B6:EA:9F, 2020-12-19 11:01:34, 2020-12-19 11:01:34, -82,        1, (not associated) ,FRITZ!Box 7530 HA
+ 70:66:55:BE:64:18, 2020-12-19 10:57:34, 2020-12-19 11:14:54, -78,      821, (not associated) ,Drei_H288A_5G_7kd9

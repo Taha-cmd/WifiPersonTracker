@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 });
 
 // import routes
-app.use("/test", require("./routes/test"));
+app.use("/test", require(path.join(__dirname, "routes", "test.js")));
 app.use("/data", require(path.join(__dirname, "routes", "data.js")));
 
 app.listen(port);
