@@ -1,6 +1,6 @@
 {
   "name": "wifipersontracker",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Rest-based backend API that serves data about clients in a specific room who are connected to the wifi",
   "main": "app.js",
   "scripts": {
