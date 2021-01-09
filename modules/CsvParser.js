@@ -7,7 +7,7 @@ const NetworkRecord = require("../records/network.record");
 
 class CsvParser {
 	constructor(path, delimiter = ",") {
-		this.data = fs.readFileSync(path, { encoding: "utf8" }); // read file a string
+		this.data = fs.readFileSync(path, { encoding: "utf8" }); // read file as a string
 		this.delimiter = delimiter;
 
 		const lines = this.data.split(EOL); // split the file into lines
