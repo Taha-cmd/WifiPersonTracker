@@ -10,6 +10,11 @@ const { randomFile } = require(path.join(modulesPath, "util.js"));
 
 const testFilesPath = path.join(__dirname, "..", "test");
 
+router.use("/*", (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
+
 router.get("/:target?", (req, res) => {
 	const parser = new CsvParser(randomFile(testFilesPath));
 	const response = { msg: "here you go", timeOfScan: new Date(), data: {} };

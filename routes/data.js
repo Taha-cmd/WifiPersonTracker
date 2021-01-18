@@ -16,6 +16,11 @@ const CsvParser = require(path.join(
 let currentFile;
 let timeOfScan;
 
+router.use("/*", (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
+
 router.post("/", (req, res) => {
 	if (!req.files) {
 		return res.status(500).json({ msg: "error uploading file" });
