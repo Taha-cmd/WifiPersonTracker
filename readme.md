@@ -1,7 +1,8 @@
 # Wifi Person Tracker
 
 ## Requirements
-* Node.js - refer to the [offical website](https://nodejs.org/en/) for installation guide
+* Node.js - refer to the [official website](https://nodejs.org/en/) for installation guide
++ Git client - [official website](https://git-scm.com/)
 
 ## Installation
 * Clone this Repository 
@@ -13,7 +14,7 @@
 
 * start the the app in development / test mode
 
-        run npm test
+        npm run test
 
 ## API
 This app is deployed on heroku - make a request to the root site to see the API documentation 
