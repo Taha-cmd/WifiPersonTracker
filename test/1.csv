@@ -1,3 +1,4 @@
+ 
  BSSID, First time seen, Last time seen, channel, Speed, Privacy, Cipher, Authentication, Power, # beacons, # IV , LAN IP, ID-length, ESSID, Key
  00:1C:10:26:22:41, 2007-10-07 12:48:58, 2007-10-07 12:49:44,  6,  48, WEP , WEP,   , 171,      301,        0, 0.  0.  0.  0,   5, zwang,
  00:1A:70:51:B5:71, 2007-10-07 12:48:58, 2007-10-07 12:49:44,  6,  48, WEP , WEP,   , 175,      257,        1, 0.  0.  0.  0,   9, brucey123,

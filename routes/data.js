@@ -6,12 +6,10 @@ const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
-const CsvParser = require(path.join(
-	__dirname,
-	"..",
-	"modules",
-	"CsvParser.js"
-));
+const modulesPath = path.join(__dirname, "..", "modules");
+
+const CsvParser = require(path.join(modulesPath, "CsvParser.js"));
+const { cleanDir } = require(path.join(modulesPath, "util.js"));
 
 let currentFile;
 let timeOfScan;
@@ -23,10 +21,10 @@ router.use("/*", (req, res, next) => {
 
 router.get("/read", (req, res) => {
 	if (currentFile && fs.existsSync(currentFile)) {
-		const text = fs.readFileSync(path.join(currentFile), {encoding: "utf8"});
+		const text = fs.readFileSync(path.join(currentFile), { encoding: "utf8" });
 		res.header("Content-Type", "text/plain");
 		res.send(text);
-	};
+	}
 });
 
 router.post("/", (req, res) => {
@@ -39,9 +37,12 @@ router.post("/", (req, res) => {
 	}
 
 	const file = req.files.data;
-	if(!fs.existsSync("upload")) {
+	if (!fs.existsSync("upload")) {
 		fs.mkdirSync("upload");
+	} else {
+		cleanDir("upload");
 	}
+
 	const newPath = path.join(__dirname, "..", "upload", uuidv4() + ".csv");
 
 	file.mv(newPath, (err) => {

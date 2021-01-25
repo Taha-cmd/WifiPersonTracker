@@ -3,7 +3,7 @@ const path = require("path");
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
-const {join} = require("path");
+const { join } = require("path");
 
 const modulesPath = path.join(__dirname, "..", "modules");
 
@@ -18,7 +18,9 @@ router.use("/*", (req, res, next) => {
 });
 
 router.get("/read", (req, res) => {
-	const text = fs.readFileSync(join(__dirname, "..", "test", "3.csv"), {encoding: "utf8"});
+	const text = fs.readFileSync(join(__dirname, "..", "test", "3.csv"), {
+		encoding: "utf8",
+	});
 	res.header("Content-Type", "text/plain");
 	res.send(text);
 });
