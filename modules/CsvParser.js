@@ -18,8 +18,8 @@ class CsvParser {
 			lines.slice(newlineIndex + 2), // second part are the clients, skip empty line and header (+2)
 		];
 
-		this.networks = this.networks.filter(line => line !== '');
-		this.clients = this.clients.filter(line => line !== '');
+		this.networks = this.networks.filter(line => line != '');
+		this.clients = this.clients.filter(line => line != '');
 		console.log(this.networks);
 		console.log(this.clients);
 	}
