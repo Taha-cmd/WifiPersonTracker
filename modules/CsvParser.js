@@ -11,12 +11,15 @@ class CsvParser {
 		this.delimiter = delimiter;
 
 		const lines = this.data.split(EOL); // split the file into lines
-		const newlineIndex = lines.indexOf(" "); // get the index of the empty line
-
+		const newlineIndex = lines.indexOf("", 1); // get the index of the empty line, returns the first match
+		
 		[this.networks, this.clients] = [
-			lines.slice(1, newlineIndex), // first part are the networks/hosts. skip header (begin at 1)
+			lines.slice(2, newlineIndex), // first part are the networks/hosts. skip header (begin at 1)
 			lines.slice(newlineIndex + 2), // second part are the clients, skip empty line and header (+2)
 		];
+
+		this.networks = this.networks.filter(line => line !== '');
+		this.clients = this.clients.filter(line => line !== '');
 	}
 
 	// map each network record as a string to network record class object
