@@ -13,15 +13,15 @@ class CsvParser {
 		//IMPORTANT: sometimes the empty line is an empty string => ""
 		//			 sometimes it is a white space => " "
 		// therefore, trim all lines
-		const lines = this.data.split(EOL).map(line => line.trim()); // split the file into lines
+		const lines = this.data.split(EOL).map((line) => line.trim()); // split the file into lines
 		const newlineIndex = lines.indexOf("", 1); // get the index of the empty line, returns the first match
 		const [networks, clients] = [
-			lines.slice(2, newlineIndex), // first part are the networks/hosts. skip header (begin at 1)
+			lines.slice(2, newlineIndex), // first part are the networks/hosts. skip empty line and header (begin at 2)
 			lines.slice(newlineIndex + 2), // second part are the clients, skip empty line and header (+2)
 		];
 
-		this.networks = networks.filter(line => line != "");
-		this.clients = clients.filter(line => line != "");
+		this.networks = networks.filter((line) => line != "");
+		this.clients = clients.filter((line) => line != "");
 	}
 
 	// map each network record as a string to network record class object
