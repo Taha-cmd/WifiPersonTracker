@@ -2,6 +2,8 @@
 const path = require("path");
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const {join} = require("path");
 
 const modulesPath = path.join(__dirname, "..", "modules");
 
@@ -13,6 +15,12 @@ const testFilesPath = path.join(__dirname, "..", "test");
 router.use("/*", (req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	next();
+});
+
+router.get("/read", (req, res) => {
+	const text = fs.readFileSync(join(__dirname, "..", "test", "3.csv"), {encoding: "utf8"});
+	res.header("Content-Type", "text/html");
+	res.send(text);
 });
 
 router.get("/:target?", (req, res) => {

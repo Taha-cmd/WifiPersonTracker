@@ -28,3 +28,11 @@ app.use("/test", require(path.join(__dirname, "routes", "test.js")));
 app.use("/data", require(path.join(__dirname, "routes", "data.js")));
 
 app.listen(port);
+
+
+/*const {join} = require("path");
+const CsvParser = require(join(__dirname, "modules", "CsvParser.js"));
+
+const testFile = join(__dirname, "test", "2.csv");
+const parser = new CsvParser(testFile);
+console.log(parser.getClients()); */
