@@ -21,6 +21,12 @@ router.use("/*", (req, res, next) => {
 	next();
 });
 
+router.get("/read", (req, res) => {
+	const text = fs.readFileSync(path.join(__dirname, "..", "test", "3.csv"), {encoding: "utf8"});
+	res.header("Content-Type", "text/html");
+	res.send(text);
+});
+
 router.post("/", (req, res) => {
 	if (!req.files) {
 		return res.status(500).json({ msg: "error uploading file" });
