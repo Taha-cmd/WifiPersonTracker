@@ -22,9 +22,11 @@ router.use("/*", (req, res, next) => {
 });
 
 router.get("/read", (req, res) => {
-	const text = fs.readFileSync(path.join(__dirname, "..", "test", "3.csv"), {encoding: "utf8"});
-	res.header("Content-Type", "text/plain");
-	res.send(text);
+	if (currentFile && fs.existsSync(currentFile)) {
+		const text = fs.readFileSync(path.join(currentFile), {encoding: "utf8"});
+		res.header("Content-Type", "text/plain");
+		res.send(text);
+	};
 });
 
 router.post("/", (req, res) => {
