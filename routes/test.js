@@ -19,7 +19,7 @@ router.use("/*", (req, res, next) => {
 
 router.get("/read", (req, res) => {
 	const text = fs.readFileSync(join(__dirname, "..", "test", "3.csv"), {encoding: "utf8"});
-	res.header("Content-Type", "text/html");
+	res.header("Content-Type", "text/plain");
 	res.send(text);
 });
 
