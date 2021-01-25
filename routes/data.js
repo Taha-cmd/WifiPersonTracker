@@ -40,7 +40,7 @@ router.post("/", (req, res) => {
 
 	const file = req.files.data;
 	if(!fs.existsSync("upload")) {
-		fs.mkdir("upload");
+		fs.mkdirSync("upload");
 	}
 	const newPath = path.join(__dirname, "..", "upload", uuidv4() + ".csv");
 
