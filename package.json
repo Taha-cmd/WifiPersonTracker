@@ -1,11 +1,15 @@
 {
   "name": "wifipersontracker",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Rest-based backend API that serves data about clients in a specific room who are connected to the wifi",
-  "main": "app.js",
+  "main": "dist/app.js",
+  "engines": {
+    "node": "12.x",
+    "npm": "6.x"
+  },
   "scripts": {
     "clean": "rm -r ./dist",
-    "build": "npm run clean && tsc",
+    "build": "tsc",
     "test": "nodemon src/app.ts",
     "start": "node dist/app.js"
   },

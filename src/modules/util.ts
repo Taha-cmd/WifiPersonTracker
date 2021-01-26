@@ -10,7 +10,7 @@ export function randomFile(dirPath: string): string {
 
 	if (files.length === 0) throw `directory ${dirPath} is empty`;
 
-	return files[Math.floor(Math.random() * files.length)];
+	return <string>files[Math.floor(Math.random() * files.length)];
 }
 
 export function cleanDir(dirPath: string): void {

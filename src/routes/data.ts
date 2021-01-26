@@ -60,7 +60,7 @@ router.post("/", (req: Request, res: Response) => {
 	res.json({ msg: "thanks" });
 });
 
-router.get("/:target?", (req, res) => {
+router.get("/:target?", (req: Request, res: Response) => {
 	if (currentFile && fs.existsSync(currentFile)) {
 		const parser: CsvParser = new CsvParser(currentFile, ",");
 		const response: response = {
