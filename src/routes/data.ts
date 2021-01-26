@@ -47,7 +47,7 @@ router.post("/", (req: Request, res: Response) => {
 		cleanDir("upload");
 	}
 
-	const newPath: string = join(__dirname, "..", "upload", uuid() + ".csv");
+	const newPath: string = join("upload", uuid() + ".csv");
 
 	file.mv(newPath, (err) => {
 		if (err) {
