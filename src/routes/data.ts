@@ -1,33 +1,33 @@
 "use strict";
 
-const express = require("express");
-const router = express.Router();
-const path = require("path");
-const fs = require("fs");
-const { v4: uuidv4 } = require("uuid");
+import express, { NextFunction, Request, Response, Router } from "express";
+import {join} from "path";
+import fs from "fs";
+import { uuid } from "uuidv4";
+import { UploadedFile } from "express-fileupload";
 
-const modulesPath = path.join(__dirname, "..", "modules");
+import CsvParser from "../modules/CsvParser.js";
+import { cleanDir } from "../modules/util.js";
+import { response } from "../interfaces/response";
 
-const CsvParser = require(path.join(modulesPath, "CsvParser.js"));
-const { cleanDir } = require(path.join(modulesPath, "util.js"));
+const router : Router = express.Router();
+let currentFile : string;
+let timeOfScan : Date;
 
-let currentFile;
-let timeOfScan;
-
-router.use("/*", (req, res, next) => {
+router.use("/*", (_ : Request, res : Response, next : NextFunction) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	next();
 });
 
-router.get("/read", (req, res) => {
+router.get("/read", (_, res : Response) => {
 	if (currentFile && fs.existsSync(currentFile)) {
-		const text = fs.readFileSync(path.join(currentFile), { encoding: "utf8" });
+		const text = fs.readFileSync(join(currentFile), { encoding: "utf8" });
 		res.header("Content-Type", "text/plain");
 		res.send(text);
 	}
 });
 
-router.post("/", (req, res) => {
+router.post("/", (req : Request, res : Response) => {
 	if (!req.files) {
 		return res.status(500).json({ msg: "error uploading file" });
 	}
@@ -36,14 +36,18 @@ router.post("/", (req, res) => {
 		return res.status(400).json({ msg: "no file identifier 'data' found" });
 	}
 
-	const file = req.files.data;
+	const file : UploadedFile = <UploadedFile>req.files.data;
+	if(!file){
+		return res.status(400).json({msg: "NO"});
+	}
+
 	if (!fs.existsSync("upload")) {
 		fs.mkdirSync("upload");
 	} else {
 		cleanDir("upload");
 	}
 
-	const newPath = path.join(__dirname, "..", "upload", uuidv4() + ".csv");
+	const newPath : string = join(__dirname, "..", "upload", uuid() + ".csv");
 
 	file.mv(newPath, (err) => {
 		if (err) {
@@ -59,7 +63,8 @@ router.post("/", (req, res) => {
 router.get("/:target?", (req, res) => {
 	if (currentFile && fs.existsSync(currentFile)) {
 		const parser = new CsvParser(currentFile, ",");
-		const response = { msg: "here you go", timeOfScan: timeOfScan, data: {} };
+		const response : response = { msg: "here you go", timeOfScan: timeOfScan,
+		 data: {networks: null, clients: null}};
 
 		if (!req.params.target || req.params.target === "all") {
 			response.data.networks = parser.getNetworks();
