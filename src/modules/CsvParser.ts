@@ -1,19 +1,23 @@
 "use strict";
 
-const { readFileSync } = require("fs");
-const { EOL } = require("os");
-const ClientRecord = require("../records/client.record");
-const NetworkRecord = require("../records/network.record");
+import { readFileSync } from "fs";
+import { EOL } from "os";
+import { ClientRecord } from "../records/client.record";
+import { NetworkRecord } from "../records/network.record";
 
-class CsvParser {
-	constructor(path, delimiter = ",") {
-		this.data = readFileSync(path, { encoding: "utf8" }); // read file as a string
+export class CsvParser {
+	private delimiter: string;
+	private networks: string[];
+	private clients: string[];
+
+	constructor(path: string, delimiter: string = ",") {
+		const data: string = readFileSync(path, { encoding: "utf8" }); // read file as a string
 		this.delimiter = delimiter;
 
 		//IMPORTANT: sometimes the empty line is an empty string => ""
 		//			 sometimes it is a white space => " "
 		// therefore, trim all lines
-		const lines = this.data.split(EOL).map((line) => line.trim()); // split the file into lines
+		const lines = data.split(EOL).map((line) => line.trim()); // split the file into lines
 		const newlineIndex = lines.indexOf("", 1); // get the index of the empty line, returns the first match
 		const [networks, clients] = [
 			lines.slice(2, newlineIndex), // first part are the networks/hosts. skip empty line and header (begin at 2)
@@ -27,21 +31,21 @@ class CsvParser {
 	// map each network record as a string to network record class object
 	// ... spread operator => spreads the elements of the array
 	// map each string to its trimmed string
-	getClients() {
+	getClients(): ClientRecord[] {
 		return this.clients.map(
-			(client) =>
-				new ClientRecord(...client.split(this.delimiter).map((el) => el.trim()))
+			(client: string) =>
+				new ClientRecord(
+					...client.split(this.delimiter).map((el: string) => el.trim())
+				)
 		);
 	}
 
-	getNetworks() {
+	getNetworks(): NetworkRecord[] {
 		return this.networks.map(
-			(network) =>
+			(network: string) =>
 				new NetworkRecord(
-					...network.split(this.delimiter).map((el) => el.trim())
+					...network.split(this.delimiter).map((el: string) => el.trim())
 				)
 		);
 	}
 }
-
-module.exports = CsvParser;

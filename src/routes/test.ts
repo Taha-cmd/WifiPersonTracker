@@ -3,13 +3,12 @@ import express, { NextFunction, Request, Response } from "express";
 import fs from "fs";
 import { join } from "path";
 
+import { CsvParser } from "../modules/CsvParser";
+import { randomFile } from "../modules/util";
+import { response } from "../interfaces/response";
+
+const testFilesPath = join(__dirname, "..", "..", "test");
 const router = express.Router();
-const modulesPath = join(__dirname, "..", "modules");
-
-const CsvParser = require(join(modulesPath, "CsvParser.js"));
-const { randomFile } = require(join(modulesPath, "util.js"));
-
-const testFilesPath = join(__dirname, "..", "test");
 
 router.use("/*", (_: Request, res: Response, next: NextFunction) => {
 	res.header("Access-Control-Allow-Origin", "*");
@@ -17,7 +16,7 @@ router.use("/*", (_: Request, res: Response, next: NextFunction) => {
 });
 
 router.get("/read", (_: Request, res: Response) => {
-	const text = fs.readFileSync(join(__dirname, "..", "test", "3.csv"), {
+	const text = fs.readFileSync(join(__dirname, "..", "..", "test", "3.csv"), {
 		encoding: "utf8",
 	});
 	res.header("Content-Type", "text/plain");
@@ -25,8 +24,8 @@ router.get("/read", (_: Request, res: Response) => {
 });
 
 router.get("/:target?", (req: Request, res: Response) => {
-	const parser = new CsvParser(randomFile(testFilesPath));
-	const response = {
+	const parser: CsvParser = new CsvParser(randomFile(testFilesPath));
+	const response: response = {
 		msg: "here you go",
 		timeOfScan: new Date(),
 		data: { networks: [], clients: [] },
@@ -48,4 +47,4 @@ router.get("/:target?", (req: Request, res: Response) => {
 	res.json(response);
 });
 
-module.exports = router;
+export default router;

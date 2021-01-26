@@ -4,9 +4,10 @@
   "description": "Rest-based backend API that serves data about clients in a specific room who are connected to the wifi",
   "main": "app.js",
   "scripts": {
-    "build": "tsc",
-    "test": "nodemon app.js",
-    "start": "node app.js"
+    "clean": "rm -r ./dist",
+    "build": "npm run clean && tsc",
+    "test": "nodemon src/app.ts",
+    "start": "node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "@types/express-fileupload": "^1.1.6",
     "@types/node": "^14.14.22",
     "nodemon": "^2.0.6",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
   }
 }

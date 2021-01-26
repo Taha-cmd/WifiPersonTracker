@@ -1,25 +1,25 @@
 "use strict";
 
 import express, { NextFunction, Request, Response, Router } from "express";
-import {join} from "path";
+import { join } from "path";
 import fs from "fs";
 import { uuid } from "uuidv4";
 import { UploadedFile } from "express-fileupload";
 
-import CsvParser from "../modules/CsvParser.js";
-import { cleanDir } from "../modules/util.js";
+import { CsvParser } from "../modules/CsvParser";
+import { cleanDir } from "../modules/util";
 import { response } from "../interfaces/response";
 
-const router : Router = express.Router();
-let currentFile : string;
-let timeOfScan : Date;
+const router: Router = express.Router();
+let currentFile: string;
+let timeOfScan: Date;
 
-router.use("/*", (_ : Request, res : Response, next : NextFunction) => {
+router.use("/*", (_: Request, res: Response, next: NextFunction) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	next();
 });
 
-router.get("/read", (_, res : Response) => {
+router.get("/read", (_, res: Response) => {
 	if (currentFile && fs.existsSync(currentFile)) {
 		const text = fs.readFileSync(join(currentFile), { encoding: "utf8" });
 		res.header("Content-Type", "text/plain");
@@ -27,7 +27,7 @@ router.get("/read", (_, res : Response) => {
 	}
 });
 
-router.post("/", (req : Request, res : Response) => {
+router.post("/", (req: Request, res: Response) => {
 	if (!req.files) {
 		return res.status(500).json({ msg: "error uploading file" });
 	}
@@ -36,9 +36,9 @@ router.post("/", (req : Request, res : Response) => {
 		return res.status(400).json({ msg: "no file identifier 'data' found" });
 	}
 
-	const file : UploadedFile = <UploadedFile>req.files.data;
-	if(!file){
-		return res.status(400).json({msg: "NO"});
+	const file: UploadedFile = <UploadedFile>req.files.data;
+	if (!file) {
+		return res.status(400).json({ msg: "NO" });
 	}
 
 	if (!fs.existsSync("upload")) {
@@ -47,7 +47,7 @@ router.post("/", (req : Request, res : Response) => {
 		cleanDir("upload");
 	}
 
-	const newPath : string = join(__dirname, "..", "upload", uuid() + ".csv");
+	const newPath: string = join(__dirname, "..", "upload", uuid() + ".csv");
 
 	file.mv(newPath, (err) => {
 		if (err) {
@@ -62,9 +62,12 @@ router.post("/", (req : Request, res : Response) => {
 
 router.get("/:target?", (req, res) => {
 	if (currentFile && fs.existsSync(currentFile)) {
-		const parser = new CsvParser(currentFile, ",");
-		const response : response = { msg: "here you go", timeOfScan: timeOfScan,
-		 data: {networks: null, clients: null}};
+		const parser: CsvParser = new CsvParser(currentFile, ",");
+		const response: response = {
+			msg: "here you go",
+			timeOfScan: timeOfScan,
+			data: { networks: [], clients: [] },
+		};
 
 		if (!req.params.target || req.params.target === "all") {
 			response.data.networks = parser.getNetworks();
@@ -85,4 +88,4 @@ router.get("/:target?", (req, res) => {
 	res.json({ msg: "no data available" });
 });
 
-module.exports = router;
+export default router;

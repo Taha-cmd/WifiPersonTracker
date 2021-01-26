@@ -1,11 +1,15 @@
 "use strict";
 
-import express, { Request, Response } from "express";
-import path from  "path";
+import express, { Application, Request, Response } from "express";
+import path from "path";
 import fileUpload from "express-fileupload";
 
+// import routes
+import { default as dataRouter } from "./routes/data";
+import { default as testRouter } from "./routes/test";
+
 const port = process.env.PORT || 8080;
-const app = express();
+const app: Application = express();
 
 app.use(express.json()); // to parse json requests
 app.use(express.text()); // to accept requests with content-type: text/plain
@@ -20,12 +24,11 @@ app.use(
 	})
 );
 
-app.get("/", (_ : Request, res : Response) => {
-	res.sendFile(path.join(__dirname, "api.html"));
+app.get("/", (_: Request, res: Response) => {
+	res.sendFile(path.join(__dirname, "..", "api.html"));
 });
 
-// import routes
-app.use("/test", require(path.join(__dirname, "routes", "test.js")));
-app.use("/data", require(path.join(__dirname, "routes", "data.js")));
+app.use("/test", testRouter);
+app.use("/data", dataRouter);
 
 app.listen(port);
