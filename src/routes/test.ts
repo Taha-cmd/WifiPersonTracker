@@ -1,43 +1,35 @@
 "use strict";
-import express, { NextFunction, Request, Response } from "express";
-import fs from "fs";
+import express, { Request, Response } from "express";
 import { join } from "path";
 
-import { CsvParser } from "../modules/CsvParser";
+import { parseAiroDumpFile } from "../modules/CsvParser";
 import { randomFile } from "../modules/util";
-import { response } from "../interfaces/response";
+import { IResponse } from "../interfaces/IResponse";
+import { IParsedAiroDumpFile } from "../interfaces/IParsedAiroDumpFile";
 
 const testFilesPath = join(__dirname, "..", "..", "test");
 const router = express.Router();
 
-router.use("/*", (_: Request, res: Response, next: NextFunction) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	next();
-});
-
-router.get("/read", (_: Request, res: Response) => {
-	const text = fs.readFileSync(join(__dirname, "..", "..", "test", "3.csv"), {
-		encoding: "utf8",
-	});
-	res.header("Content-Type", "text/plain");
-	res.send(text);
-});
-
 router.get("/:target?", (req: Request, res: Response) => {
-	const parser: CsvParser = new CsvParser(randomFile(testFilesPath));
-	const response: response = {
+	const parsedFile: IParsedAiroDumpFile = parseAiroDumpFile(
+		randomFile(testFilesPath)
+	);
+
+	const response: IResponse = {
 		msg: "here you go",
 		timeOfScan: new Date(),
 		data: { networks: [], clients: [] },
 	};
 
 	if (!req.params.target || req.params.target === "all") {
-		response.data.networks = parser.getNetworks();
-		response.data.clients = parser.getClients();
+		[response.data.networks, response.data.clients] = [
+			parsedFile.networks,
+			parsedFile.clients,
+		];
 	} else if (req.params.target === "clients") {
-		response.data.clients = parser.getClients();
+		response.data.clients = parsedFile.clients;
 	} else if (req.params.target === "networks") {
-		response.data.networks = parser.getNetworks();
+		response.data.networks = parsedFile.networks;
 	} else {
 		return res
 			.status(404)

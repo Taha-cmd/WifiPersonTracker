@@ -1,6 +1,6 @@
 "use strict";
 
-import express, { Application, Request, Response } from "express";
+import express, { Application, NextFunction, Request, Response } from "express";
 import path from "path";
 import fileUpload from "express-fileupload";
 
@@ -23,6 +23,13 @@ app.use(
 		abortOnLimit: true,
 	})
 );
+
+// allow request from everyone
+app.get("/*", (_, res: Response, next: NextFunction) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Host", "yaw boi");
+	next();
+});
 
 app.get("/", (_: Request, res: Response) => {
 	res.sendFile(path.join(__dirname, "..", "api.html"));
