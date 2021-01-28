@@ -8,7 +8,7 @@
     "npm": "6.x"
   },
   "scripts": {
-    "clean": "rm -r ./dist && rm -r ./upload",
+    "clean": "rm -r ./dist",
     "build": "tsc && npm run minify",
     "test": "nodemon src/app.ts",
     "start": "node dist/app.js",
