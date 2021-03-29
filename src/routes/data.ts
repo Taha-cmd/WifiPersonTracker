@@ -1,32 +1,38 @@
 "use strict";
 
 import express, { Request, Response, Router } from "express";
-import { join } from "path";
+import path, { join, resolve } from "path";
 import fs from "fs";
 import { uuid } from "uuidv4";
 import { UploadedFile } from "express-fileupload";
 
 import { parseAiroDumpFile } from "../modules/CsvParser";
 import { cleanDir } from "../modules/util";
+import { maskMacAddresses } from "../modules/PrivacyManager";
 
 import { IResponse } from "../interfaces/IResponse";
 import { IParsedAiroDumpFile } from "../interfaces/IParsedAiroDumpFile";
 
 const router: Router = express.Router();
-let currentFile: string;
+let currentFilePath: string;
+let currentFileParsed: IParsedAiroDumpFile;
 let timeOfScan: Date;
 
+const uploadPath = resolve("upload");
+
 router.get("/read", (_, res: Response) => {
-	if (!(currentFile && fs.existsSync(currentFile))) {
+	if (!(currentFilePath && fs.existsSync(currentFilePath))) {
 		return res.json({ msg: "no data available" });
 	}
 
-	const text: string = fs.readFileSync(join(currentFile), { encoding: "utf8" });
+	const text: string = fs.readFileSync(currentFilePath, {
+		encoding: "utf8"
+	});
 	res.header("Content-Type", "text/plain");
 	res.send(text);
 });
 
-router.post("/", (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
 	if (!req.files) {
 		return res.status(500).json({ msg: "error uploading file" });
 	}
@@ -40,46 +46,63 @@ router.post("/", (req: Request, res: Response) => {
 		return res.status(400).json({ msg: "NO" });
 	}
 
-	if (!fs.existsSync("upload")) {
-		fs.mkdirSync("upload");
-	} else {
-		cleanDir("upload");
+	try {
+		if (!fs.existsSync(uploadPath)) {
+			fs.mkdirSync(uploadPath);
+		} else {
+			cleanDir(uploadPath);
+		}
+	} catch (error) {
+		console.log("error cleaning directory" + error);
 	}
 
-	const newPath: string = join("upload", uuid() + ".csv");
+	const newPath: string = path.resolve(uploadPath, uuid() + ".csv");
 
-	file.mv(newPath, (err) => {
-		if (err) {
-			return res.status(500).json({ msg: "error saving the file" });
-		}
-	});
+	// mv is async, need to wait for the file to be uploaded before it can be parsed
+	// not using the async version can cause problems, since you might try to parse the file
+	//before it was actually uploaded
+	await file
+		.mv(newPath)
+		.catch((error) =>
+			res.status(500).json({ msg: "error saving the file " + error })
+		);
 
-	currentFile = newPath;
+	// new path is relative, currentFile must be absolute
+	currentFilePath = path.resolve(newPath);
+	currentFileParsed = parseAiroDumpFile(currentFilePath);
+	try {
+		currentFileParsed.clients = maskMacAddresses(currentFileParsed.clients);
+	} catch (error) {
+		console.log("error parsing file: " + error);
+	}
+
 	timeOfScan = new Date();
 	res.json({ msg: "thanks" });
 });
 
 router.get("/:target?", (req: Request, res: Response) => {
-	if (!(currentFile && fs.existsSync(currentFile))) {
+	if (
+		!(currentFilePath && fs.existsSync(currentFilePath)) ||
+		!currentFileParsed
+	) {
 		return res.json({ msg: "no data available" });
 	}
+
 	const response: IResponse = {
 		msg: "here you go",
 		timeOfScan: timeOfScan,
-		data: { networks: [], clients: [] },
+		data: { networks: [], clients: [] }
 	};
-
-	const parsedFile: IParsedAiroDumpFile = parseAiroDumpFile(currentFile);
 
 	if (!req.params.target || req.params.target === "all") {
 		[response.data.networks, response.data.clients] = [
-			parsedFile.networks,
-			parsedFile.clients,
+			currentFileParsed.networks,
+			currentFileParsed.clients
 		];
 	} else if (req.params.target === "clients") {
-		response.data.clients = parsedFile.clients;
+		response.data.clients = currentFileParsed.clients;
 	} else if (req.params.target === "networks") {
-		response.data.networks = parsedFile.networks;
+		response.data.networks = currentFileParsed.networks;
 	} else {
 		return res
 			.status(404)

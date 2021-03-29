@@ -17,7 +17,7 @@ clients
 empty line(s)
 */
 export function parseAiroDumpFile(filePath: string): IParsedAiroDumpFile {
-	if (!existsSync(filePath)) throw `file ${filePath} does not exist`;
+	if (!existsSync(filePath)) throw new Error(`file ${filePath} does not exist`);
 
 	// read file as a string
 	// split the file into lines, trim all to avoid white space problems
@@ -32,7 +32,7 @@ export function parseAiroDumpFile(filePath: string): IParsedAiroDumpFile {
 	const newlineIndex = lines.indexOf("", 1); // get the index of the empty line, returns the first match
 	const [networks, clients] = [
 		lines.slice(2, newlineIndex).filter((line) => line !== ""), // first part are the networks/hosts. skip empty line and header (begin at 2)
-		lines.slice(newlineIndex + 2).filter((line) => line !== ""), // second part are the clients, skip empty line and header (+2)
+		lines.slice(newlineIndex + 2).filter((line) => line !== "") // second part are the clients, skip empty line and header (+2)
 	];
 
 	// map each network record as a string to network record class object
@@ -46,6 +46,6 @@ export function parseAiroDumpFile(filePath: string): IParsedAiroDumpFile {
 		clients: clients.map(
 			(client: string) =>
 				new ClientRecord(...client.split(",").map((el: string) => el.trim()))
-		),
+		)
 	};
 }

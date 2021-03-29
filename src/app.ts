@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true })); // to parse incoming input
 app.use(
 	fileUpload({
 		limits: { fileSize: 5 * 1024 * 1024 },
-		abortOnLimit: true,
+		abortOnLimit: true
 	})
 );
 
@@ -37,5 +37,7 @@ app.get("/", (_: Request, res: Response) => {
 
 app.use("/test", testRouter);
 app.use("/data", dataRouter);
+
+const arr = ["hola", "boy"];
 
 app.listen(port);
