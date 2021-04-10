@@ -20,3 +20,10 @@ export function cleanDir(dirPath: string): void {
 		unlinkSync(join(dirPath, file))
 	);
 }
+
+export function calculateDistance(frequency: number, power: number): number {
+	return Math.pow(
+		10,
+		(27.55 - 20 * Math.log10(frequency) + Math.abs(power)) / 20
+	);
+}

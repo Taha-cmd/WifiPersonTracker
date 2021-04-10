@@ -38,6 +38,4 @@ app.get("/", (_: Request, res: Response) => {
 app.use("/test", testRouter);
 app.use("/data", dataRouter);
 
-const arr = ["hola", "boy"];
-
 app.listen(port);
