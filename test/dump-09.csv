@@ -1,0 +1,14 @@
+
+BSSID, First time seen, Last time seen, channel, Speed, Privacy, Cipher, Authentication, Power, # beacons, # IV, LAN IP, ID-length, ESSID, Key
+51:CD:23:BC:C9:C0, 2021-04-03 10:57:13, 2021-04-03 10:58:03, 54, 530, WPA2, CCMP, PSK, -32,       26,        2,   0.  0.  0.  0,  11, Drei_H288A_5G_7kd9, 
+14:12:B9:C3:82:2E, 2021-04-03 10:57:04, 2021-04-03 10:57:04,  8, 140, WPA2, CCMP TKIP, PSK, -72,        2,        0,   0.  0.  0.  0,  12, UPC244532500, 
+F4:B2:69:C1:C2:DF, 2021-04-03 10:57:17, 2021-04-03 10:58:08, 32, 100, WPA2, CCMP, PSK, -62,       12,        0,   0.  0.  0.  0,  12, UPC504532500, 
+D0:5C:C4:9B:EA:8B, 2021-04-03 10:57:08, 2021-04-03 10:58:46, 12, 125, WPA2, CCMP TKIP, PSK, -22,       43,        0,   0.  0.  0.  0,  10, UPCF2B4B5E, 
+B2:5C:14:9B:BA:3B, 2021-04-03 10:57:08, 2021-04-03 10:58:46, 16, 140, WPA2, CCMP TKIP, MGT, -82,       16,        0,   0.  0.  0.  0,  11, UPC Wi-Free, 
+B5:4F:44:E0:42:D3, 2021-04-03 10:56:56, 2021-04-03 10:58:47, 12, 220, WPA2, CCMP, PSK, -42,       22,        0,   0.  0.  0.  0,   2, A1-e04ad9, 
+42:4C:BC:AC:B2:7B, 2021-04-03 10:56:59, 2021-04-03 10:58:40,  4, 110, WPA2, CCMP, PSK, -52,       52,        7,   0.  0.  0.  0,  9, Drei_H288A_24G_7kd9, 
+
+Station MAC, First time seen, Last time seen, Power, # packets, BSSID, Probed ESSIDs
+F2:4D:F8:44:55:2B, 2021-04-03 10:57:48, 2021-04-03 10:57:48, -41,        3, D0:5C:C4:9B:EA:8B,
+F6:7C:84:4F:54:D2, 2021-04-03 10:57:14, 2021-04-03 10:57:15, -24,        2, 42:4C:BC:AC:B2:7B,
+
